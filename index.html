@@ -571,10 +571,14 @@
                             <label>Filter by Resource</label>
                             <select id="resourceFilter" onchange="filterSessions()">
                                 <option value="all">All Resources</option>
-                                <option value="cricket">Cricket Nets</option>
-                                <option value="badminton">Badminton Court</option>
-                                <option value="snooker">Snooker Table</option>
-                                <option value="playstation">PlayStation</option>
+                                <option value="cricket">Cricket Nets 1</option>
+                                 <option value="cricket">Cricket Nets 2</option>
+                                 <option value="cricket">Cricket Nets 3</option>
+                                <option value="badminton">Badminton Court 1</option>
+                                <option value="badminton">Badminton Court 2</option>
+                                <option value="badminton">Badminton Court 3</option>
+                                <option value="badminton">Badminton Court 4</option>
+                               
                             </select>
                         </div>
                         <div class="form-group">
@@ -610,11 +614,14 @@
                             <div class="form-group">
                                 <label for="resourceType">Resource *</label>
                                 <select id="resourceType" name="resourceType" required>
-                                    <option value="">Select Resource</option>
-                                    <option value="cricket">Cricket Nets</option>
-                                    <option value="badminton">Badminton Court</option>
-                                    <option value="snooker">Snooker Table</option>
-                                    <option value="playstation">PlayStation</option>
+                                 <option value="">Select Resource</option>
+                                 <option value="cricket">Cricket Nets 1</option>
+                                 <option value="cricket">Cricket Nets 2</option>
+                                 <option value="cricket">Cricket Nets 3</option>
+                                 <option value="badminton">Badminton Court 1</option>
+                                 <option value="badminton">Badminton Court 2</option>
+                                 <option value="badminton">Badminton Court 3</option>
+                                 <option value="badminton">Badminton Court 4</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -622,8 +629,8 @@
                                 <select id="duration" name="duration" required onchange="updateEndTime()">
                                     <option value="">Select Duration</option>
                                     <option value="60">1 Hour - ₹100</option>
-                                    <option value="180">3 Hours - ₹280</option>
-                                    <option value="300">5 Hours - ₹450</option>
+                                    <option value="180">3 Hours - ₹300</option>
+                                    <option value="300">5 Hours - ₹500</option>
                                     <option value="custom">Custom Duration</option>
                                 </select>
                             </div>
@@ -667,7 +674,7 @@
                 <div class="queue-list">
                     <div class="queue-item">
                         <div>
-                            <strong>Rahul Kumar</strong><br>
+                            <strong>JASSU</strong><br>
                             <small><i class="fas fa-table-tennis"></i> Badminton Court • Waiting 12 mins</small>
                         </div>
                         <div>
@@ -677,7 +684,7 @@
                     </div>
                     <div class="queue-item">
                         <div>
-                            <strong>Priya Sharma</strong><br>
+                            <strong>BHAVANI</strong><br>
                             <small><i class="fas fa-gamepad"></i> PlayStation • Waiting 8 mins</small>
                         </div>
                         <div>
@@ -736,12 +743,12 @@
         let resources = [
             { id: 1, name: 'Cricket Net 1', type: 'cricket', status: 'free' },
             { id: 2, name: 'Cricket Net 2', type: 'cricket', status: 'free' },
-            { id: 3, name: 'Badminton Court 1', type: 'badminton', status: 'free' },
-            { id: 4, name: 'Badminton Court 2', type: 'badminton', status: 'free' },
-            { id: 5, name: 'Snooker Table 1', type: 'snooker', status: 'free' },
-            { id: 6, name: 'Snooker Table 2', type: 'snooker', status: 'free' },
-            { id: 7, name: 'PlayStation 1', type: 'playstation', status: 'free' },
-            { id: 8, name: 'PlayStation 2', type: 'playstation', status: 'free' }
+            { id: 3, name: 'Cricket Net 3', type: 'cricket', status: 'free' },
+            { id: 4, name: 'Badminton Court 1', type: 'badminton', status: 'free' },
+            { id: 5, name: 'Badminton Court 2', type: 'badminton', status: 'free' },
+            { id: 6, name: 'Badminton Court 3', type: 'badminton', status: 'free' },
+            { id: 7, name: 'Badminton Court 4', type: 'badminton', status: 'free' },
+            
         ];
 
         // Login functionality - Fixed for sandboxed environment
@@ -1209,4 +1216,5 @@
         // (removed duplicate DOMContentLoaded listener)
     </script>
 </body>
+
 </html>
