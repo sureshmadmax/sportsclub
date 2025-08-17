@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports Hub Management System</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Login Screen */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            color: #00d4ff;
+            margin-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #b0b0b0;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #00d4ff;
+            box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.2);
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #00d4ff, #0099cc);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 212, 255, 0.3);
+        }
+
+        /* Main App */
+        .app {
+            display: none;
+        }
+
+        .app.active {
+            display: block;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header-left h1 {
+            color: #00d4ff;
+            margin-bottom: 5px;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-tab {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-tab.active,
+        .nav-tab:hover {
+            background: linear-gradient(45deg, #00d4ff, #0099cc);
+            transform: translateY(-2px);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Dashboard */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .sessions-grid {
+            display: grid;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .session-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .session-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .session-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .player-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .status-active { background: #22c55e; color: white; }
+        .status-warning { background: #f59e0b; color: white; }
+        .status-expired { background: #ef4444; color: white; }
+
+        .session-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #b0b0b0;
+        }
+
+        .timer-display {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .timer-text {
+            font-size: 2.5rem;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            transition: width 1s ease;
+            border-radius: 4px;
+        }
+
+        .progress-active { background: linear-gradient(90deg, #22c55e, #16a34a); }
+        .progress-warning { background: linear-gradient(90deg, #f59e0b, #d97706); }
+        .progress-expired { background: linear-gradient(90deg, #ef4444, #dc2626); }
+
+        /* Forms */
+        .form-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        select {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        select option {
+            background: #1a1a2e;
+            color: white;
+        }
+
+        /* Resources */
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .resource-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .resource-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .resource-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .resource-status {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .status-free { background: #22c55e; }
+        .status-occupied { background: #ef4444; }
+        .status-waiting { background: #f59e0b; }
+
+        /* Queue */
+        .queue-list {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .queue-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .queue-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Charts */
+        .chart-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .chart-placeholder {
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: #b0b0b0;
+        }
+
+        /* Notifications */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #ef4444;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .session-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .timer-text {
+                font-size: 2rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="logo">
+                    <i class="fas fa-dumbbell"></i>
+                </div>
+                <h2>Sports Hub Manager</h2>
+                <p>Slot & Timer Management System</p>
+            </div>
+            <div id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="button" class="btn" onclick="handleLogin()">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="mainApp" class="app">
+        <div class="container">
+            <div class="header">
+                <div class="header-left">
+                    <h1><i class="fas fa-dumbbell"></i> Sports Hub</h1>
+                    <p>Real-time Session Management</p>
+                </div>
+                <div class="header-right">
+                    <span id="currentTime"></span>
+                    <button class="btn-secondary" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+
+            <div class="nav-tabs">
+                <button class="nav-tab active" onclick="showTab('dashboard')">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </button>
+                <button class="nav-tab" onclick="showTab('addSession')">
+                    <i class="fas fa-plus-circle"></i> Add Session
+                </button>
+                <button class="nav-tab" onclick="showTab('resources')">
+                    <i class="fas fa-building"></i> Resources
+                </button>
+                <button class="nav-tab" onclick="showTab('queue')">
+                    <i class="fas fa-list"></i> Queue
+                </button>
+                <button class="nav-tab" onclick="showTab('analytics')">
+                    <i class="fas fa-chart-bar"></i> Analytics
+                </button>
+                <button class="nav-tab" onclick="showTab('profiles')">
+                    <i class="fas fa-users"></i> Profiles
+                </button>
+            </div>
+
+            <!-- Dashboard Tab -->
+            <div id="dashboard" class="tab-content active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="color: #22c55e;">
+                            <i class="fas fa-play-circle"></i>
+                        </div>
+                        <div class="stat-number" id="activeSessions">0</div>
+                        <div>Active Sessions</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="color: #f59e0b;">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-number" id="totalRevenue">₹0</div>
+                        <div>Today's Revenue</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="color: #00d4ff;">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <div class="stat-number" id="availableResources">8</div>
+                        <div>Available Resources</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="color: #ef4444;">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-number" id="queueLength">0</div>
+                        <div>Players in Queue</div>
+                    </div>
+                </div>
+
+                <div class="form-container" style="margin-bottom: 30px;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Filter by Resource</label>
+                            <select id="resourceFilter" onchange="filterSessions()">
+                                <option value="all">All Resources</option>
+                                <option value="cricket">Cricket Nets</option>
+                                <option value="badminton">Badminton Court</option>
+                                <option value="snooker">Snooker Table</option>
+                                <option value="playstation">PlayStation</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Sort by</label>
+                            <select id="sortBy" onchange="sortSessions()">
+                                <option value="time">Time Remaining</option>
+                                <option value="player">Player Name</option>
+                                <option value="resource">Resource</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="sessionsContainer" class="sessions-grid"></div>
+            </div>
+
+            <!-- Add Session Tab -->
+            <div id="addSession" class="tab-content">
+                <div class="form-container">
+                    <h2 style="margin-bottom: 20px;">Add New Player Session</h2>
+                    <form id="sessionForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="playerName">Player Name *</label>
+                                <input type="text" id="playerName" name="playerName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="playerPhone">Phone Number</label>
+                                <input type="tel" id="playerPhone" name="playerPhone">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="resourceType">Resource *</label>
+                                <select id="resourceType" name="resourceType" required>
+                                    <option value="">Select Resource</option>
+                                    <option value="cricket">Cricket Nets</option>
+                                    <option value="badminton">Badminton Court</option>
+                                    <option value="snooker">Snooker Table</option>
+                                    <option value="playstation">PlayStation</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="duration">Duration *</label>
+                                <select id="duration" name="duration" required onchange="updateEndTime()">
+                                    <option value="">Select Duration</option>
+                                    <option value="60">1 Hour - ₹100</option>
+                                    <option value="180">3 Hours - ₹280</option>
+                                    <option value="300">5 Hours - ₹450</option>
+                                    <option value="custom">Custom Duration</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row" id="customDurationRow" style="display: none;">
+                            <div class="form-group">
+                                <label for="customDuration">Custom Duration (minutes)</label>
+                                <input type="number" id="customDuration" name="customDuration" min="15" max="600" onchange="updateEndTime()">
+                            </div>
+                            <div class="form-group">
+                                <label for="customPrice">Price (₹)</label>
+                                <input type="number" id="customPrice" name="customPrice" min="0">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Start Time</label>
+                                <input type="text" id="startTime" readonly style="background: rgba(255,255,255,0.1);">
+                            </div>
+                            <div class="form-group">
+                                <label>End Time</label>
+                                <input type="text" id="endTime" readonly style="background: rgba(255,255,255,0.1);">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn">
+                            <i class="fas fa-plus-circle"></i> Start Session
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Resources Tab -->
+            <div id="resources" class="tab-content">
+                <h2 style="margin-bottom: 20px;">Resource Management</h2>
+                <div class="resources-grid" id="resourcesGrid"></div>
+            </div>
+
+            <!-- Queue Tab -->
+            <div id="queue" class="tab-content">
+                <h2 style="margin-bottom: 20px;">Queue & Waiting List</h2>
+                <div class="queue-list">
+                    <div class="queue-item">
+                        <div>
+                            <strong>Rahul Kumar</strong><br>
+                            <small><i class="fas fa-table-tennis"></i> Badminton Court • Waiting 12 mins</small>
+                        </div>
+                        <div>
+                            <button class="btn-secondary">Notify</button>
+                            <button class="btn-danger">Remove</button>
+                        </div>
+                    </div>
+                    <div class="queue-item">
+                        <div>
+                            <strong>Priya Sharma</strong><br>
+                            <small><i class="fas fa-gamepad"></i> PlayStation • Waiting 8 mins</small>
+                        </div>
+                        <div>
+                            <button class="btn-secondary">Notify</button>
+                            <button class="btn-danger">Remove</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Tab -->
+            <div id="analytics" class="tab-content">
+                <h2 style="margin-bottom: 20px;">Reports & Analytics</h2>
+                <div class="chart-container">
+                    <h3 style="margin-bottom: 15px;">Daily Revenue Trend</h3>
+                    <div class="chart-placeholder">
+                        <i class="fas fa-chart-line" style="font-size: 3rem; margin-right: 20px;"></i>
+                        Revenue Chart Placeholder
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <h3 style="margin-bottom: 15px;">Resource Usage Statistics</h3>
+                    <div class="chart-placeholder">
+                        <i class="fas fa-chart-pie" style="font-size: 3rem; margin-right: 20px;"></i>
+                        Usage Chart Placeholder
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profiles Tab -->
+            <div id="profiles" class="tab-content">
+                <h2 style="margin-bottom: 20px;">Player Profiles</h2>
+                <div class="form-container">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Search Player</label>
+                            <input type="text" placeholder="Enter player name or phone...">
+                        </div>
+                        <div class="form-group">
+                            <button class="btn">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+
+    <script>
+        // Global variables
+        let sessions = [];
+        let resources = [
+            { id: 1, name: 'Cricket Net 1', type: 'cricket', status: 'free' },
+            { id: 2, name: 'Cricket Net 2', type: 'cricket', status: 'free' },
+            { id: 3, name: 'Badminton Court 1', type: 'badminton', status: 'free' },
+            { id: 4, name: 'Badminton Court 2', type: 'badminton', status: 'free' },
+            { id: 5, name: 'Snooker Table 1', type: 'snooker', status: 'free' },
+            { id: 6, name: 'Snooker Table 2', type: 'snooker', status: 'free' },
+            { id: 7, name: 'PlayStation 1', type: 'playstation', status: 'free' },
+            { id: 8, name: 'PlayStation 2', type: 'playstation', status: 'free' }
+        ];
+
+        // Login functionality - Fixed for sandboxed environment
+        function handleLogin() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            console.log('Login attempt:', username, password); // Debug log
+            
+            if (username.trim() && password.trim()) {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('mainApp').classList.add('active');
+                document.getElementById('mainApp').style.display = 'block';
+                initializeApp();
+            } else {
+                alert('Please enter both username and password');
+            }
+        }
+
+        // Initialize when page loads
+        window.addEventListener('load', function() {
+            console.log('Page loaded'); // Debug log
+            
+            // Add Enter key support for login
+            document.getElementById('username').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    handleLogin();
+                }
+            });
+            
+            document.getElementById('password').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    handleLogin();
+                }
+            });
+            
+            updateStartTime();
+            console.log('Login setup complete'); // Debug log
+        });
+
+        function logout() {
+            document.getElementById('mainApp').classList.remove('active');
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('loginForm').reset();
+        }
+
+        // Initialize app
+        function initializeApp() {
+            updateCurrentTime();
+            setInterval(updateCurrentTime, 1000);
+            setInterval(updateTimers, 1000);
+            updateStartTime();
+            renderResources();
+            updateStats();
+            
+            // Add some demo sessions
+            addDemoSessions();
+        }
+
+        function addDemoSessions() {
+            const now = new Date();
+            sessions.push({
+                id: 1,
+                playerName: 'Arjun Patel',
+                playerPhone: '+91 9876543210',
+                resourceType: 'cricket',
+                resourceName: 'Cricket Net 1',
+                startTime: new Date(now.getTime() - 30 * 60000),
+                endTime: new Date(now.getTime() + 30 * 60000),
+                duration: 60,
+                price: 100
+            });
+            
+            sessions.push({
+                id: 2,
+                playerName: 'Sneha Singh',
+                playerPhone: '+91 9876543211',
+                resourceType: 'badminton',
+                resourceName: 'Badminton Court 1',
+                startTime: new Date(now.getTime() - 10 * 60000),
+                endTime: new Date(now.getTime() + 5 * 60000),
+                duration: 15,
+                price: 50
+            });
+
+            updateResources();
+            renderSessions();
+            updateStats();
+        }
+
+        // Tab functionality
+        function showTab(tabName) {
+            document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        // Time functions
+        function updateCurrentTime() {
+            const now = new Date();
+            document.getElementById('currentTime').textContent = now.toLocaleString('en-IN');
+        }
+
+        function updateStartTime() {
+            const now = new Date();
+            document.getElementById('startTime').value = now.toLocaleString('en-IN');
+        }
+
+        function updateEndTime() {
+            const duration = document.getElementById('duration').value;
+            const customDuration = document.getElementById('customDuration').value;
+            const customDurationRow = document.getElementById('customDurationRow');
+            
+            if (duration === 'custom') {
+                customDurationRow.style.display = 'grid';
+                return;
+            } else {
+                customDurationRow.style.display = 'none';
+            }
+            
+            if (duration) {
+                const now = new Date();
+                const endTime = new Date(now.getTime() + parseInt(duration) * 60000);
+                document.getElementById('endTime').value = endTime.toLocaleString('en-IN');
+            }
+        }
+
+        // Session management
+        document.getElementById('sessionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const playerName = document.getElementById('playerName').value;
+            const playerPhone = document.getElementById('playerPhone').value;
+            const resourceType = document.getElementById('resourceType').value;
+            let duration = document.getElementById('duration').value;
+            let price = 0;
+            
+            if (duration === 'custom') {
+                duration = document.getElementById('customDuration').value;
+                price = document.getElementById('customPrice').value;
+            } else {
+                switch(duration) {
+                    case '60': price = 100; break;
+                    case '180': price = 280; break;
+                    case '300': price = 450; break;
+                }
+            }
+            
+            // Find available resource
+            const availableResource = resources.find(r => r.type === resourceType && r.status === 'free');
+            if (!availableResource) {
+                showNotification('No available resources of this type!', 'error');
+                return;
+            }
+            
+            const now = new Date();
+            const endTime = new Date(now.getTime() + parseInt(duration) * 60000);
+            
+            const newSession = {
+                id: Date.now(),
+                playerName,
+                playerPhone,
+                resourceType,
+                resourceName: availableResource.name,
+                startTime: now,
+                endTime: endTime,
+                duration: parseInt(duration),
+                price: parseInt(price)
+            };
+            
+            sessions.push(newSession);
+            availableResource.status = 'occupied';
+            
+            showNotification(`Session started for ${playerName}!`, 'success');
+            document.getElementById('sessionForm').reset();
+            updateStartTime();
+            renderSessions();
+            renderResources();
+            updateStats();
+            showTab('dashboard');
+        });
+
+        // Render functions
+        function renderSessions() {
+            const container = document.getElementById('sessionsContainer');
+            container.innerHTML = '';
+            
+            sessions.forEach(session => {
+                const now = new Date();
+                const timeLeft = session.endTime - now;
+                const totalTime = session.endTime - session.startTime;
+                const progress = Math.max(0, (totalTime - timeLeft) / totalTime * 100);
+                
+                let status = 'active';
+                let statusText = 'Active';
+                let timerClass = 'progress-active';
+                
+                if (timeLeft <= 0) {
+                    status = 'expired';
+                    statusText = 'Time Up';
+                    timerClass = 'progress-expired';
+                } else if (timeLeft <= 10 * 60000) {
+                    status = 'warning';
+                    statusText = 'Warning';
+                    timerClass = 'progress-warning';
+                }
+                
+                const hours = Math.floor(Math.abs(timeLeft) / (1000 * 60 * 60));
+                const minutes = Math.floor((Math.abs(timeLeft) % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((Math.abs(timeLeft) % (1000 * 60)) / 1000);
+                
+                const timerDisplay = timeLeft < 0 ? 
+                    `-${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}` :
+                    `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                
+                const sessionCard = `
+                    <div class="session-card">
+                        <div class="session-header">
+                            <div class="player-name">${session.playerName}</div>
+                            <div class="status-badge status-${status}">${statusText}</div>
+                        </div>
+                        <div class="session-details">
+                            <div class="detail-item">
+                                <i class="fas fa-building"></i>
+                                <span>${session.resourceName}</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-phone"></i>
+                                <span>${session.playerPhone || 'N/A'}</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-clock"></i>
+                                <span>${session.duration} minutes</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-rupee-sign"></i>
+                                <span>₹${session.price}</span>
+                            </div>
+                        </div>
+                        <div class="timer-display">
+                            <div class="timer-text" style="color: ${timeLeft < 0 ? '#ef4444' : timeLeft <= 10 * 60000 ? '#f59e0b' : '#22c55e'}">${timerDisplay}</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill ${timerClass}" style="width: ${Math.min(100, progress)}%"></div>
+                        </div>
+                        <div style="margin-top: 15px; text-align: center;">
+                            <button class="btn-secondary" onclick="extendSession(${session.id})">
+                                <i class="fas fa-plus"></i> Extend
+                            </button>
+                            <button class="btn-danger" onclick="endSession(${session.id})">
+                                <i class="fas fa-stop"></i> End Session
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                container.innerHTML += sessionCard;
+            });
+        }
+
+        function renderResources() {
+            const container = document.getElementById('resourcesGrid');
+            container.innerHTML = '';
+            
+            resources.forEach(resource => {
+                const session = sessions.find(s => s.resourceName === resource.name);
+                let statusClass = 'status-free';
+                let statusText = 'Free';
+                let playerInfo = '';
+                
+                if (resource.status === 'occupied' && session) {
+                    statusClass = 'status-occupied';
+                    statusText = 'Occupied';
+                    const timeLeft = session.endTime - new Date();
+                    const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                    playerInfo = `
+                        <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.2);">
+                            <strong>${session.playerName}</strong><br>
+                            <small>Ends in: ${hours}h ${minutes}m</small>
+                        </div>
+                    `;
+                }
+                
+                const resourceCard = `
+                    <div class="resource-card">
+                        <div class="resource-header">
+                            <div class="resource-title">
+                                <i class="fas fa-${getResourceIcon(resource.type)}"></i>
+                                ${resource.name}
+                            </div>
+                            <div class="resource-status ${statusClass}">${statusText}</div>
+                        </div>
+                        <div style="color: #b0b0b0;">
+                            <i class="fas fa-tag"></i> ${getResourceType(resource.type)}
+                        </div>
+                        ${playerInfo}
+                    </div>
+                `;
+                
+                container.innerHTML += resourceCard;
+            });
+        }
+
+        function getResourceIcon(type) {
+            const icons = {
+                cricket: 'baseball-ball',
+                badminton: 'table-tennis',
+                snooker: 'circle',
+                playstation: 'gamepad'
+            };
+            return icons[type] || 'building';
+        }
+
+        function getResourceType(type) {
+            const types = {
+                cricket: 'Cricket Nets',
+                badminton: 'Badminton Court',
+                snooker: 'Snooker Table',
+                playstation: 'PlayStation'
+            };
+            return types[type] || type;
+        }
+
+        function updateResources() {
+            resources.forEach(resource => {
+                const activeSession = sessions.find(s => s.resourceName === resource.name);
+                if (activeSession) {
+                    const timeLeft = activeSession.endTime - new Date();
+                    if (timeLeft <= 0) {
+                        resource.status = 'free';
+                    } else {
+                        resource.status = 'occupied';
+                    }
+                } else {
+                    resource.status = 'free';
+                }
+            });
+        }
+
+        function updateStats() {
+            const activeSessions = sessions.filter(s => s.endTime > new Date()).length;
+            const totalRevenue = sessions.reduce((sum, s) => sum + s.price, 0);
+            const availableResources = resources.filter(r => r.status === 'free').length;
+            
+            document.getElementById('activeSessions').textContent = activeSessions;
+            document.getElementById('totalRevenue').textContent = `₹${totalRevenue}`;
+            document.getElementById('availableResources').textContent = availableResources;
+            document.getElementById('queueLength').textContent = '2'; // Demo value
+        }
+
+        function updateTimers() {
+            sessions.forEach(session => {
+                const now = new Date();
+                const timeLeft = session.endTime - now;
+                
+                // Check for notifications
+                if (timeLeft > 0 && timeLeft <= 5 * 60000 && !session.warningShown) {
+                    showNotification(`⚠️ ${session.playerName}'s session ends in 5 minutes!`, 'warning');
+                    session.warningShown = true;
+                }
+                
+                if (timeLeft <= 0 && !session.expiredShown) {
+                    showNotification(`🚨 ${session.playerName}'s session has expired!`, 'error');
+                    playNotificationSound();
+                    session.expiredShown = true;
+                }
+            });
+            
+            updateResources();
+            renderSessions();
+            renderResources();
+            updateStats();
+        }
+
+        // Session actions
+        function extendSession(sessionId) {
+            const session = sessions.find(s => s.id === sessionId);
+            if (session) {
+                const extension = prompt('Extend by how many minutes?', '30');
+                if (extension && !isNaN(extension)) {
+                    session.endTime = new Date(session.endTime.getTime() + parseInt(extension) * 60000);
+                    session.duration += parseInt(extension);
+                    session.price += Math.floor(parseInt(extension) / 60) * 100;
+                    showNotification(`Session extended by ${extension} minutes!`, 'success');
+                    renderSessions();
+                    updateStats();
+                }
+            }
+        }
+
+        function endSession(sessionId) {
+            if (confirm('Are you sure you want to end this session?')) {
+                sessions = sessions.filter(s => s.id !== sessionId);
+                updateResources();
+                renderSessions();
+                renderResources();
+                updateStats();
+                showNotification('Session ended successfully!', 'success');
+            }
+        }
+
+        // Filter and sort functions
+        function filterSessions() {
+            const filterValue = document.getElementById('resourceFilter').value;
+            const sessionCards = document.querySelectorAll('.session-card');
+            
+            sessionCards.forEach(card => {
+                const resourceText = card.querySelector('.detail-item span').textContent;
+                if (filterValue === 'all' || resourceText.toLowerCase().includes(filterValue)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function sortSessions() {
+            const sortValue = document.getElementById('sortBy').value;
+            // Implementation for sorting sessions
+            renderSessions();
+        }
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = `notification show ${type}`;
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 5000);
+        }
+
+        function playNotificationSound() {
+            // Create a simple beep sound
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.5);
+        }
+
+        // Handle custom duration input
+        document.getElementById('customDuration').addEventListener('input', function() {
+            const minutes = this.value;
+            if (minutes) {
+                const price = Math.ceil(minutes / 60) * 100;
+                document.getElementById('customPrice').value = price;
+                updateEndTime();
+            }
+        });
+
+        // Initialize demo data when page loads
+        // (removed duplicate DOMContentLoaded listener)
+    </script>
+</body>
+</html>
